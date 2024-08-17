@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Basic styling for the body to set font and background color */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+            text-align: center; /* Center-aligns text */
+        }
+        
+        .container {
+            max-width: 800px; /* Limits the container width */
+            margin: 0 auto; /* Centers the container */
+            padding: 20px; /* Adds padding around content */
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 2.5em; /* Large font size for the main title */
+            color: #007acc; /* Blue color for the main title */
+        }
+
+        h2 {
+            margin: 20px 0;
+            font-size: 1.5em; /* Medium font size for subtitles */
+            color: #555; /* Gray color for subtitles */
+        }
+
+        .content p {
+            font-size: 1.2em; /* Slightly larger font size for paragraphs */
+            margin: 10px 0;
+        }
+
+        .uv-index {
+            background-color: #f7f7f7; /* Light gray background for UV index box */
+            border-radius: 8px; /* Rounded corners */
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Light shadow */
+            transition: background-color 0.3s ease; /* Smooth color transition */
+        }
+
+        /* Colors indicating UV level */
+        .low {
+            background-color: #a2e6a2; /* Light green for low UV */
+        }
+
+        .moderate {
+            background-color: #fff6a2; /* Light yellow for moderate UV */
+        }
+
+        .high {
+            background-color: #f2a2a2; /* Light red for high UV */
+        }
+
+        .forecast {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two columns for forecast */
+            gap: 10px; /* Space between forecast items */
+            margin-top: 20px;
+        }
+
+        .forecast-item {
+            background-color: #fff; /* White background for each forecast item */
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Light shadow */
+            transition: background-color 0.3s ease; /* Smooth color transition */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main title -->
+        <h1>{{ title }}</h1>
+
+        <!-- Display the user's city -->
+        <h2>{{ city }}</h2>
+
+        <!-- Current UV index with color-coded background -->
+        <div class="uv-index {{ uv_class }}">
+            <h2>{{ current_uv }}</h2>
+        
+        </div>
+
+        <!-- Forecast section -->
+        <div class="forecast">
+            {% for date, uv_value, uv_class in forecast %}
+                <!-- Each forecast item with color-coded background -->
+                <div class="forecast-item {{ uv_class }}">
+                    <h2>{{ date }}</h2>
+                    <p>Highest UV of the Day: {{ uv_value }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
