@@ -1,7 +1,6 @@
 from flask import Flask, render_template
-import geocoder
-from datetime import datetime
 import requests
+from datetime import datetime
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -9,25 +8,31 @@ app = Flask(__name__)
 # Define the home route
 @app.route("/")
 def home():
-    # Use geocoder to get the user's latitude and longitude
-    g = geocoder.ip('me')
-    lat, lng = g.latlng
-    latitude = lat
-    longitude = lng
+    # Use requests to get the user's latitude and longitude
+    response = requests.get('https://ipinfo.io/json')
+    if response.status_code == 200:
+        data = response.json()
+        lat, lng = data['loc'].split(',')
+        latitude = lat
+        longitude = lng
+    else:
+        print(f"Failed to retrieve data: {response.status_code}")
+        latitude = None
+        longitude = None
 
     # Get the current date and format it
     current_date = datetime.now()
     formatted_date = current_date.strftime('%Y-%m-%d')
 
     # Retrieve the city from geolocation data
-    g = geocoder.ip('me')
-    city = f'You are in {g.city}'
+    city = f'You are in {data.get("city", "Unknown")}' if latitude and longitude else 'Location unavailable'
     
-
     title = f'UV RAYS TODAY'
 
     # Function to get UV index and forecast data
     def get_uv_index(latitude, longitude):
+        if not latitude or not longitude:
+            return None, None
         url = f'https://currentuvindex.com/api/v1/uvi?latitude={latitude}&longitude={longitude}'
         response = requests.get(url)
         data = response.json()
@@ -80,11 +85,16 @@ def home():
             return 'high'
 
     # Get current UV index and forecast
-    current_uv, formatted_dates = get_uv_index(latitude, longitude)
-    uv_class = determine_uv_class(current_uv)
+    if latitude and longitude:
+        current_uv, formatted_dates = get_uv_index(latitude, longitude)
+        uv_class = determine_uv_class(current_uv) if current_uv else 'low'
+    else:
+        current_uv = None
+        formatted_dates = []
+        uv_class = 'low'
 
     # Render the HTML template with data
-    return render_template('index_html.html', city=city, title=title, current_uv=f'Current UV: {current_uv}', uv_class=uv_class, forecast=formatted_dates)
+    return render_template('index_html.html', city=city, title=title, current_uv=f'Current UV: {current_uv}' if current_uv else 'Unable to fetch UV data', uv_class=uv_class, forecast=formatted_dates)
 
 # Run the Flask app
 if __name__ == "__main__":

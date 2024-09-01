@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #007acc;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        /* UV Index Box Styles */
+        .uv-index {
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* UV Class Styles */
+        .low {
+            background-color: #a2e6a2;
+        }
+
+        .moderate {
+            background-color: #fff6a2;
+        }
+
+        .high {
+            background-color: #f2a2a2;
+        }
+
+        /* Forecast Section Styles */
+        .forecast {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .forecast-item {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ title }}</h1>
+            <h2>{{ city }}</h2>
+        </header>
+
+        <div class="uv-index {{ uv_class }}">
+            <h2>{{ current_uv }}</h2>
+        </div>
+
+        <section class="forecast">
+            {% for date, uv_value, uv_class in forecast %}
+                <div class="forecast-item {{ uv_class }}">
+                    <h2>{{ date }}</h2>
+                    <p>Highest UV of the Day: {{ uv_value }}</p>
+                </div>
+            {% endfor %}
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 UV Index Web Project. All rights reserved.</p>
+    </footer>
+</body>
+</html>
