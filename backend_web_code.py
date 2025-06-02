@@ -26,6 +26,19 @@ def get_location_data():
         response = requests.get('https://ipinfo.io/json', timeout=10)
         response.raise_for_status()
         return response.json()
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 429:
+            # rate limited, use a default location (NYC coordinates)
+            logger.warning("ipinfo.io rate limited, using default location")
+            return {
+                'loc': '40.7128,-74.0060',
+                'city': 'New York',
+                'region': 'New York',
+                'country': 'US'
+            }
+        else:
+            logger.error(f"Location data HTTP error: {e}")
+            return None
     except requests.RequestException as e:
         logger.error(f"Location data error: {e}")
         return None
