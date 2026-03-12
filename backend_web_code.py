@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, jsonify, request, redirect
 import requests
 from datetime import datetime
 import logging
@@ -103,68 +103,8 @@ def process_forecast_data(forecast_data, current_date_str):
 
 @app.route("/")
 def home():
-    try:
-        # figure out where the user is
-        location_data = get_location_data()
-        if not location_data or 'loc' not in location_data:
-            raise ValueError("Unable to determine location")
-        
-        lat, lng = location_data['loc'].split(',')
-        city = location_data.get('city', 'Unknown')
-        region = location_data.get('region', '')
-        country = location_data.get('country', '')
-        
-        # build a nice location string
-        location_parts = [city]
-        if region and region != city:
-            location_parts.append(region)
-        if country:
-            location_parts.append(country)
-        location_str = ', '.join(location_parts)
-        
-        # need today's date for the api
-        current_date = datetime.now()
-        current_date_str = current_date.strftime('%Y-%m-%d')
-        
-        # get the actual uv data
-        uv_data = get_uv_data(lat, lng, current_date_str)
-        
-        if uv_data and uv_data.get('ok'):
-            current_uv = uv_data['now']['uvi']
-            current_classification = get_uv_classification(current_uv)
-            forecast_data = process_forecast_data(uv_data.get('forecast', []), current_date_str)
-        else:
-            current_uv = None
-            current_classification = get_uv_classification(0)
-            forecast_data = []
-        
-        # pack everything up for the template
-        template_data = {
-            'title': 'UV Index Today',
-            'location': location_str,
-            'current_uv': current_uv,
-            'current_classification': current_classification,
-            'forecast': forecast_data,
-            'last_updated': current_date.strftime('%B %d, %Y at %I:%M %p'),
-            'has_data': current_uv is not None
-        }
-        
-        return render_template('index_html.html', **template_data)
-        
-    except Exception as e:
-        logger.error(f"Error in home route: {e}")
-        # something went wrong, show error page
-        template_data = {
-            'title': 'UV Index Today',
-            'location': 'Location unavailable',
-            'current_uv': None,
-            'current_classification': get_uv_classification(0),
-            'forecast': [],
-            'last_updated': datetime.now().strftime('%B %d, %Y at %I:%M %p'),
-            'has_data': False,
-            'error_message': 'Unable to fetch UV data. Please try again later.'
-        }
-        return render_template('index_html.html', **template_data)
+    return redirect("http://localhost:3000")
+
 
 @app.route("/api/uv")
 def api_uv():
@@ -197,6 +137,79 @@ def api_uv():
     except Exception as e:
         logger.error(f"API error: {e}")
         return jsonify({'error': 'Internal server error'}), 500
+
+@app.route("/api/forecast")
+def api_forecast():
+    try:
+        lat = request.args.get('lat')
+        lng = request.args.get('lng')
+        location_str = 'Unknown Location'
+
+        if not lat or not lng:
+            location_data = get_location_data()
+            if location_data and 'loc' in location_data:
+                lat, lng = location_data['loc'].split(',')
+                city = location_data.get('city', 'Unknown')
+                region = location_data.get('region', '')
+                country = location_data.get('country', '')
+                location_parts = [p for p in [city, region if region != city else None, country] if p]
+                location_str = ', '.join(location_parts)
+            else:
+                return jsonify({'error': 'Location not available'}), 400
+
+        current_date_str = datetime.now().strftime('%Y-%m-%d')
+        uv_data = get_uv_data(lat, lng, current_date_str)
+
+        if not uv_data or not uv_data.get('ok'):
+            return jsonify({'error': 'UV data not available'}), 503
+
+        current_uv = uv_data['now']['uvi']
+        current_classification = get_uv_classification(current_uv)
+
+        today = datetime.now()
+        today_entry = {
+            'dayName': today.strftime('%A'),
+            'date': today.strftime('%B %-d'),
+            'uvIndex': current_uv,
+            'level': current_classification['level'],
+            'advice': current_classification['recommendation'],
+            'isToday': True
+        }
+
+        forecast_days = [today_entry]
+        uv_by_date = {}
+        for entry in uv_data.get('forecast', []):
+            date = entry['time'][:10]
+            if date == current_date_str:
+                continue
+            uvi = entry['uvi']
+            if date not in uv_by_date or uvi > uv_by_date[date]:
+                uv_by_date[date] = uvi
+
+        for date_str, uv_value in sorted(uv_by_date.items()):
+            try:
+                date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+                classification = get_uv_classification(uv_value)
+                forecast_days.append({
+                    'dayName': date_obj.strftime('%A'),
+                    'date': date_obj.strftime('%B %-d'),
+                    'uvIndex': uv_value,
+                    'level': classification['level'],
+                    'advice': classification['recommendation'],
+                    'isToday': False
+                })
+            except ValueError:
+                continue
+
+        return jsonify({
+            'location': location_str,
+            'forecast': forecast_days[:7]
+        })
+
+    except Exception as e:
+        logger.error(f"Forecast API error: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
 
 @app.route("/health")
 def health_check():
