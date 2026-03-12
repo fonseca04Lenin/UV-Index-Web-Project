@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #87ceeb;
+  --foreground: #2c1e0f;
+  --card: #5b8c3e;
+  --card-foreground: #f5f0dc;
+  --popover: #5b8c3e;
+  --popover-foreground: #f5f0dc;
+  --primary: #4a7a2e;
+  --primary-foreground: #f5f0dc;
+  --secondary: #6b9e4a;
+  --secondary-foreground: #f5f0dc;
+  --muted: #4a6e2a;
+  --muted-foreground: #c8d8a8;
+  --accent: #f0c040;
+  --accent-foreground: #2c1e0f;
+  --destructive: #d04030;
+  --destructive-foreground: #f5f0dc;
+  --border: #3a6620;
+  --input: #3a6620;
+  --ring: #f0c040;
+  --chart-1: #4a7a2e;
+  --chart-2: #f0c040;
+  --chart-3: #8b6914;
+  --chart-4: #6b9e4a;
+  --chart-5: #d04030;
+  --radius: 0px;
+}
+
+.dark {
+  --background: #1a1a2e;
+  --foreground: #e0d8c0;
+  --card: #2a2a4a;
+  --card-foreground: #e0d8c0;
+  --popover: #2a2a4a;
+  --popover-foreground: #e0d8c0;
+  --primary: #5070b0;
+  --primary-foreground: #e0d8c0;
+  --secondary: #3a3a5a;
+  --secondary-foreground: #e0d8c0;
+  --muted: #3a3a5a;
+  --muted-foreground: #8888aa;
+  --accent: #f0c040;
+  --accent-foreground: #1a1a2e;
+  --destructive: #d04030;
+  --destructive-foreground: #e0d8c0;
+  --border: #4a4a6a;
+  --input: #4a4a6a;
+  --ring: #f0c040;
+  --chart-1: #5070b0;
+  --chart-2: #f0c040;
+  --chart-3: #8b6914;
+  --chart-4: #5b8c3e;
+  --chart-5: #d04030;
+}
+
+@theme inline {
+  --font-sans: var(--font-silkscreen), 'Silkscreen', monospace;
+  --font-serif: var(--font-silkscreen), 'Silkscreen', monospace;
+  --font-mono: var(--font-silkscreen), 'Silkscreen', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius));
+  --radius-md: calc(var(--radius));
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius));
+}
+
+/* Pixel-perfect rendering */
+* {
+  image-rendering: pixelated;
+}
+
+/* Rotating sun animation */
+@keyframes pixel-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.pixel-spin {
+  animation: pixel-spin 10s linear infinite;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nighttime scene darkening */
+.dark .pixel-ground {
+  filter: brightness(0.28) saturate(0.4);
+}
+.dark .pixel-clouds {
+  opacity: 0.06;
+}
+.dark .pixel-tree {
+  filter: brightness(0.22) saturate(0.3);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
