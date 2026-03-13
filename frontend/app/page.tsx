@@ -1,5 +1,5 @@
 import { ForecastView } from "@/components/forecast-view"
-import { PixelGround, PixelClouds, PixelTree, PixelStars } from "@/components/pixel-scene"
+import { PixelGround, PixelClouds, PixelTree, PixelStars, PixelAnimals } from "@/components/pixel-scene"
 
 export default function Page() {
   return (
@@ -7,6 +7,7 @@ export default function Page() {
       <PixelStars />
       <PixelClouds />
       <PixelGround />
+      <PixelAnimals />
       <PixelTree position="left-[5%]" />
       <PixelTree position="right-[8%]" />
 
