@@ -111,20 +111,97 @@ export function PixelClouds() {
   )
 }
 
+// Minecraft cow sprite - side view pixel grid (each number = color index)
+// 0=transparent, 1=white(#E8E8E8), 2=black(#262626), 3=gray(#C7C7C7), 4=pink snout(#F5948F), 5=dark gray(#8B8B8B)
+const COW_SPRITE = [
+  [0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,2,1,2,1,2,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,2,4,4,4,2,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,2,2,2,0,2,2,2,2,2,2,2,2,0,0],
+  [0,0,0,0,0,0,0,0,0,2,1,1,2,2,1,1,2,2,2,0],
+  [0,0,0,0,0,0,0,0,0,2,1,1,2,2,1,1,2,2,2,0],
+  [0,0,0,0,0,0,0,0,0,2,3,3,1,1,3,3,1,1,2,0],
+  [0,0,0,0,0,0,0,0,0,2,3,3,1,1,3,3,1,1,2,0],
+  [0,0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0,0,0],
+]
+
+const COW_COLORS: Record<number, string> = {
+  0: "transparent",
+  1: "#E8E8E8",
+  2: "#262626",
+  3: "#C7C7C7",
+  4: "#F5948F",
+  5: "#8B8B8B",
+}
+
+// Minecraft pig sprite - side view pixel grid
+// 0=transparent, 1=pink(#F0A0A0), 2=dark pink(#DB7B7B), 3=light pink(#EDCACA), 4=snout(#DB9090), 5=black(#262626)
+const PIG_SPRITE = [
+  [0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0],
+  [0,0,0,0,2,1,5,1,2,0,0,0,0,0,0,0,0],
+  [0,0,0,2,4,4,4,4,2,0,0,0,0,0,0,0,0],
+  [0,0,0,0,2,2,2,2,0,2,2,2,2,2,2,2,0],
+  [0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,2,2],
+  [0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,2,0],
+  [0,0,0,0,0,0,0,0,2,3,3,3,3,3,3,2,0],
+  [0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0],
+  [0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0],
+]
+
+const PIG_COLORS: Record<number, string> = {
+  0: "transparent",
+  1: "#F0A0A0",
+  2: "#DB7B7B",
+  3: "#EDCACA",
+  4: "#DB9090",
+  5: "#262626",
+}
+
+function PixelSprite({ 
+  sprite, 
+  colors, 
+  pixelSize = 3 
+}: { 
+  sprite: number[][]
+  colors: Record<number, string>
+  pixelSize?: number 
+}) {
+  return (
+    <div style={{ imageRendering: "pixelated" }}>
+      {sprite.map((row, y) => (
+        <div key={y} className="flex">
+          {row.map((pixel, x) => (
+            <div
+              key={x}
+              style={{
+                width: pixelSize,
+                height: pixelSize,
+                backgroundColor: colors[pixel],
+              }}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1 }) {
   const [x, setX] = useState(initialX)
   const [facing, setFacing] = useState<1 | -1>(direction)
   const [isWalking, setIsWalking] = useState(true)
-  const [legOffset, setLegOffset] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isWalking) {
         setX((prev) => {
-          const next = prev + facing * 0.15
-          if (next > 85) {
+          const next = prev + facing * 0.08
+          if (next > 80) {
             setFacing(-1)
-            return 85
+            return 80
           }
           if (next < 5) {
             setFacing(1)
@@ -132,13 +209,12 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
           }
           return next
         })
-        setLegOffset((prev) => (prev + 1) % 4)
       }
     }, 100)
 
     const pauseInterval = setInterval(() => {
       setIsWalking((prev) => !prev)
-      if (Math.random() > 0.5) {
+      if (Math.random() > 0.6) {
         setFacing((prev) => (prev === 1 ? -1 : 1))
       }
     }, 3000 + Math.random() * 4000)
@@ -149,89 +225,13 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
     }
   }, [facing, isWalking])
 
-  const frontLegUp = isWalking && legOffset < 2
-  const backLegUp = isWalking && legOffset >= 2
-
   return (
     <div
-      className="absolute bottom-[38px] z-[2]"
+      className="absolute bottom-[26px] z-[2] transition-all duration-100"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
-      {/* Minecraft-style cow - SIDE VIEW with 3D depth */}
-      <div className="relative" style={{ imageRendering: "pixelated" }}>
-        {/* Head (box shape from side) */}
-        <div className="absolute -left-3 top-0 flex flex-col">
-          {/* Top of head - darker for 3D */}
-          <div className="flex">
-            <div className="w-[5px] h-[3px] bg-[#8a8a8a]" />
-            <div className="w-[5px] h-[3px] bg-[#a0a0a0]" />
-          </div>
-          {/* Head side */}
-          <div className="flex">
-            <div className="w-[5px] h-[5px] bg-[#d4d4d4]" />
-            <div className="w-[5px] h-[5px] bg-[#e8e8e8]" />
-          </div>
-          {/* Eye */}
-          <div className="absolute top-[4px] left-[2px] w-[2px] h-[2px] bg-[#1a1a1a]" />
-          {/* Snout/nose area */}
-          <div className="flex">
-            <div className="w-[5px] h-[4px] bg-[#c4b59a]" />
-            <div className="w-[5px] h-[4px] bg-[#d4c4aa]" />
-          </div>
-          {/* Nostril */}
-          <div className="absolute top-[10px] left-[2px] w-[1px] h-[1px] bg-[#4a4a4a]" />
-        </div>
-        
-        {/* Body (long box from side) */}
-        <div className="flex flex-col">
-          {/* Top edge - darker for 3D */}
-          <div className="flex">
-            <div className="w-[6px] h-[2px] bg-[#1a1a1a]" />
-            <div className="w-[6px] h-[2px] bg-[#8a8a8a]" />
-            <div className="w-[6px] h-[2px] bg-[#1a1a1a]" />
-            <div className="w-[6px] h-[2px] bg-[#8a8a8a]" />
-          </div>
-          {/* Body - spotted pattern */}
-          <div className="flex">
-            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
-            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
-            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
-            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
-          </div>
-          <div className="flex">
-            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
-            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
-            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
-            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
-          </div>
-          {/* Belly - lighter */}
-          <div className="flex">
-            <div className="w-[6px] h-[3px] bg-[#c8c8c8]" />
-            <div className="w-[6px] h-[3px] bg-[#d8d8d8]" />
-            <div className="w-[6px] h-[3px] bg-[#d8d8d8]" />
-            <div className="w-[6px] h-[3px] bg-[#c8c8c8]" />
-          </div>
-        </div>
-        
-        {/* Legs - 4 legs visible from side (front pair, back pair) */}
-        <div className="flex justify-between" style={{ width: "24px" }}>
-          {/* Front legs */}
-          <div className="flex flex-col">
-            <div 
-              className="w-[4px] h-[8px] bg-[#c8c8c8]"
-              style={{ transform: frontLegUp ? "translateY(-2px)" : "translateY(0)" }}
-            />
-          </div>
-          {/* Back legs */}
-          <div className="flex flex-col">
-            <div 
-              className="w-[4px] h-[8px] bg-[#c8c8c8]"
-              style={{ transform: backLegUp ? "translateY(-2px)" : "translateY(0)" }}
-            />
-          </div>
-        </div>
-      </div>
+      <PixelSprite sprite={COW_SPRITE} colors={COW_COLORS} pixelSize={3} />
     </div>
   )
 }
@@ -240,30 +240,28 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
   const [x, setX] = useState(initialX)
   const [facing, setFacing] = useState<1 | -1>(direction)
   const [isWalking, setIsWalking] = useState(true)
-  const [legOffset, setLegOffset] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isWalking) {
         setX((prev) => {
-          const next = prev + facing * 0.12
-          if (next > 90) {
+          const next = prev + facing * 0.06
+          if (next > 85) {
             setFacing(-1)
-            return 90
+            return 85
           }
-          if (next < 10) {
+          if (next < 8) {
             setFacing(1)
-            return 10
+            return 8
           }
           return next
         })
-        setLegOffset((prev) => (prev + 1) % 4)
       }
     }, 100)
 
     const pauseInterval = setInterval(() => {
       setIsWalking((prev) => !prev)
-      if (Math.random() > 0.5) {
+      if (Math.random() > 0.6) {
         setFacing((prev) => (prev === 1 ? -1 : 1))
       }
     }, 2500 + Math.random() * 3000)
@@ -274,80 +272,13 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
     }
   }, [facing, isWalking])
 
-  const frontLegUp = isWalking && legOffset < 2
-  const backLegUp = isWalking && legOffset >= 2
-
   return (
     <div
-      className="absolute bottom-[38px] z-[2]"
+      className="absolute bottom-[26px] z-[2] transition-all duration-100"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
-      {/* Minecraft-style pig - SIDE VIEW with 3D depth */}
-      <div className="relative" style={{ imageRendering: "pixelated" }}>
-        {/* Head (cube from side) */}
-        <div className="absolute -left-2 top-1 flex flex-col">
-          {/* Top of head */}
-          <div className="flex">
-            <div className="w-[4px] h-[2px] bg-[#d68a8a]" />
-            <div className="w-[4px] h-[2px] bg-[#e8a0a0]" />
-          </div>
-          {/* Head side */}
-          <div className="flex">
-            <div className="w-[4px] h-[5px] bg-[#f0a8a8]" />
-            <div className="w-[4px] h-[5px] bg-[#ffb8b8]" />
-          </div>
-          {/* Eye */}
-          <div className="absolute top-[3px] left-[1px] w-[2px] h-[2px] bg-[#1a1a1a]" />
-          {/* Snout */}
-          <div className="absolute top-[5px] -left-[3px] flex flex-col">
-            <div className="w-[4px] h-[3px] bg-[#f5c0c0]" />
-            <div className="absolute top-[1px] left-[1px] w-[1px] h-[1px] bg-[#8a5050]" />
-          </div>
-        </div>
-        
-        {/* Body (rectangular from side) */}
-        <div className="flex flex-col">
-          {/* Top edge */}
-          <div className="flex">
-            <div className="w-[5px] h-[2px] bg-[#d68a8a]" />
-            <div className="w-[5px] h-[2px] bg-[#e09898]" />
-            <div className="w-[5px] h-[2px] bg-[#d68a8a]" />
-          </div>
-          {/* Body main */}
-          <div className="flex">
-            <div className="w-[5px] h-[5px] bg-[#f0a8a8]" />
-            <div className="w-[5px] h-[5px] bg-[#ffb8b8]" />
-            <div className="w-[5px] h-[5px] bg-[#f0a8a8]" />
-          </div>
-          <div className="flex">
-            <div className="w-[5px] h-[5px] bg-[#ffb8b8]" />
-            <div className="w-[5px] h-[5px] bg-[#ffc8c8]" />
-            <div className="w-[5px] h-[5px] bg-[#ffb8b8]" />
-          </div>
-          {/* Belly */}
-          <div className="flex">
-            <div className="w-[5px] h-[2px] bg-[#ffc8c8]" />
-            <div className="w-[5px] h-[2px] bg-[#ffd8d8]" />
-            <div className="w-[5px] h-[2px] bg-[#ffc8c8]" />
-          </div>
-        </div>
-        
-        {/* Legs */}
-        <div className="flex justify-between" style={{ width: "15px" }}>
-          <div 
-            className="w-[3px] h-[6px] bg-[#f0a8a8]"
-            style={{ transform: frontLegUp ? "translateY(-2px)" : "translateY(0)" }}
-          />
-          <div 
-            className="w-[3px] h-[6px] bg-[#f0a8a8]"
-            style={{ transform: backLegUp ? "translateY(-2px)" : "translateY(0)" }}
-          />
-        </div>
-        
-        {/* Curly tail */}
-        <div className="absolute -right-1 top-3 w-[3px] h-[3px] rounded-full bg-[#f0a8a8]" />
-      </div>
+      <PixelSprite sprite={PIG_SPRITE} colors={PIG_COLORS} pixelSize={3} />
     </div>
   )
 }
@@ -355,11 +286,11 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
 export function PixelAnimals() {
   return (
     <div className="fixed bottom-0 left-0 right-0 pointer-events-none z-[2]" aria-hidden="true">
-      <PixelCow initialX={15} direction={1} />
-      <PixelCow initialX={65} direction={-1} />
-      <PixelPig initialX={30} direction={1} />
-      <PixelPig initialX={50} direction={-1} />
-      <PixelPig initialX={78} direction={1} />
+      <PixelCow initialX={12} direction={1} />
+      <PixelCow initialX={60} direction={-1} />
+      <PixelPig initialX={28} direction={1} />
+      <PixelPig initialX={45} direction={-1} />
+      <PixelPig initialX={75} direction={1} />
     </div>
   )
 }
