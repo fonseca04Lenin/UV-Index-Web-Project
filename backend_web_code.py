@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, redirect
+from flask_cors import CORS
 import requests
 from datetime import datetime
 import logging
@@ -11,6 +12,10 @@ logger = logging.getLogger(__name__)
 
 # create flask app
 app = Flask(__name__)
+CORS(app, origins=[
+    "https://uv-index-web-project.vercel.app",
+    "http://localhost:3000"
+])
 
 # uv index levels and what they mean
 UV_CLASSIFICATIONS = {
