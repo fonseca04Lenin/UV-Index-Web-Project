@@ -28,7 +28,6 @@ def get_location_data():
         return response.json()
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 429:
-            # rate limited, use a default location (NYC coordinates)
             logger.warning("ipinfo.io rate limited, using default location")
             return {
                 'loc': '40.7128,-74.0060',
@@ -47,7 +46,7 @@ def get_uv_classification(uv_index):
     for (min_val, max_val), classification in UV_CLASSIFICATIONS.items():
         if min_val <= uv_index <= max_val:
             return classification
-    return UV_CLASSIFICATIONS[(0, 2)]  # fallback to low if something weird happens
+    return UV_CLASSIFICATIONS[(0, 2)]
 
 @lru_cache(maxsize=50)
 def get_uv_data(latitude, longitude, date_str):
@@ -70,7 +69,6 @@ def process_forecast_data(forecast_data, current_date_str):
     if not forecast_data:
         return []
     
-    # skip today and group the rest by date
     filtered_forecast = [entry for entry in forecast_data if current_date_str not in entry['time']]
     uv_by_date = {}
     
@@ -82,7 +80,6 @@ def process_forecast_data(forecast_data, current_date_str):
         else:
             uv_by_date[date] = max(uv_by_date[date], uvi)
     
-    # make it look nice for the frontend
     formatted_forecast = []
     for date_str, uv_value in sorted(uv_by_date.items()):
         try:
@@ -99,7 +96,7 @@ def process_forecast_data(forecast_data, current_date_str):
             logger.error(f"Date parsing error: {e}")
             continue
     
-    return formatted_forecast[:7]  # only need a week
+    return formatted_forecast[:7]
 
 @app.route("/")
 def home():
