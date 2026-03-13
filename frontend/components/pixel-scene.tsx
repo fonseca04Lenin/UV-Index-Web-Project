@@ -111,104 +111,101 @@ export function PixelClouds() {
   )
 }
 
-// Minecraft Pig SVG Component - Side view with 3D blocky style
+// Minecraft Pig SVG Component - Side view with authentic blocky Minecraft style
 function MinecraftPigSVG() {
   return (
-    <svg width="60" height="40" viewBox="0 0 60 40" style={{ imageRendering: "pixelated" }}>
-      {/* Body - main pink */}
-      <rect x="20" y="12" width="30" height="18" fill="#fab8c4" />
-      {/* Body - top highlight */}
-      <rect x="20" y="12" width="30" height="4" fill="#fcd7de" />
-      {/* Body - bottom shadow */}
-      <rect x="20" y="26" width="30" height="4" fill="#f6889d" />
+    <svg width="48" height="32" viewBox="0 0 48 32" style={{ imageRendering: "pixelated" }}>
+      {/* BODY - rectangular box shape */}
+      <rect x="16" y="8" width="24" height="14" fill="#F0A0A0" />
+      {/* Body top highlight */}
+      <rect x="16" y="8" width="24" height="3" fill="#FFCECE" />
+      {/* Body bottom darker */}
+      <rect x="16" y="19" width="24" height="3" fill="#DB7B7B" />
       
-      {/* Head - main */}
-      <rect x="4" y="8" width="18" height="18" fill="#fab8c4" />
-      {/* Head - top highlight */}
-      <rect x="4" y="8" width="18" height="4" fill="#fcd7de" />
-      {/* Head - front (snout area) */}
-      <rect x="0" y="14" width="6" height="10" fill="#fcd7de" />
+      {/* HEAD - square blocky head */}
+      <rect x="0" y="4" width="16" height="16" fill="#F0A0A0" />
+      {/* Head top highlight */}
+      <rect x="0" y="4" width="16" height="3" fill="#FFCECE" />
+      {/* Head front face */}
+      <rect x="0" y="7" width="4" height="10" fill="#FFCECE" />
       
-      {/* Eye */}
-      <rect x="8" y="12" width="4" height="4" fill="white" />
-      <rect x="10" y="12" width="2" height="4" fill="black" />
+      {/* EYE - small black square */}
+      <rect x="6" y="8" width="3" height="3" fill="#FFFFFF" />
+      <rect x="7" y="9" width="2" height="2" fill="#000000" />
       
-      {/* Snout */}
-      <rect x="0" y="16" width="6" height="6" fill="#f6889d" />
+      {/* SNOUT - protruding rectangle */}
+      <rect x="-4" y="10" width="6" height="8" fill="#EDAAAA" />
       {/* Nostrils */}
-      <rect x="1" y="18" width="2" height="2" fill="#BB444E" />
-      <rect x="3" y="18" width="2" height="2" fill="#BB444E" />
+      <rect x="-3" y="13" width="2" height="2" fill="#8B5555" />
+      <rect x="0" y="13" width="2" height="2" fill="#8B5555" />
       
-      {/* Ears */}
-      <rect x="6" y="4" width="4" height="6" fill="#fab8c4" />
-      <rect x="14" y="4" width="4" height="6" fill="#fab8c4" />
+      {/* EAR - single visible ear from side */}
+      <rect x="4" y="0" width="6" height="5" fill="#F0A0A0" />
+      <rect x="4" y="0" width="6" height="2" fill="#DB7B7B" />
       
-      {/* Legs */}
-      <rect x="22" y="30" width="6" height="10" fill="#fab8c4" />
-      <rect x="24" y="30" width="4" height="10" fill="#f6889d" />
-      <rect x="42" y="30" width="6" height="10" fill="#fab8c4" />
-      <rect x="44" y="30" width="4" height="10" fill="#f6889d" />
+      {/* LEGS - 4 short stubby legs */}
+      <rect x="18" y="22" width="5" height="8" fill="#F0A0A0" />
+      <rect x="20" y="22" width="3" height="8" fill="#DB7B7B" />
+      <rect x="33" y="22" width="5" height="8" fill="#F0A0A0" />
+      <rect x="35" y="22" width="3" height="8" fill="#DB7B7B" />
       
-      {/* Tail (curly) */}
-      <rect x="50" y="14" width="4" height="4" fill="#f6889d" />
-      <rect x="54" y="12" width="3" height="3" fill="#f6889d" />
-      <rect x="56" y="10" width="3" height="3" fill="#f6889d" />
+      {/* TAIL - curly pig tail */}
+      <rect x="40" y="10" width="3" height="3" fill="#F0A0A0" />
+      <rect x="43" y="8" width="3" height="3" fill="#F0A0A0" />
+      <rect x="45" y="6" width="2" height="3" fill="#DB7B7B" />
     </svg>
   )
 }
 
-// Minecraft Cow SVG Component - Side view with 3D blocky style  
+// Minecraft Cow SVG Component - Side view with authentic blocky Minecraft style  
 function MinecraftCowSVG() {
   return (
-    <svg width="70" height="50" viewBox="0 0 70 50" style={{ imageRendering: "pixelated" }}>
-      {/* Body - white base */}
-      <rect x="22" y="14" width="38" height="22" fill="#E8E8E8" />
-      {/* Body - top darker edge */}
-      <rect x="22" y="14" width="38" height="4" fill="#C7C7C7" />
-      {/* Body - black spots */}
-      <rect x="26" y="18" width="10" height="10" fill="#262626" />
-      <rect x="42" y="20" width="8" height="8" fill="#262626" />
-      <rect x="50" y="26" width="8" height="6" fill="#262626" />
+    <svg width="56" height="38" viewBox="0 0 56 38" style={{ imageRendering: "pixelated" }}>
+      {/* BODY - rectangular with spots */}
+      <rect x="18" y="10" width="28" height="16" fill="#D8D8D8" />
+      {/* Body top edge darker */}
+      <rect x="18" y="10" width="28" height="3" fill="#A8A8A8" />
+      {/* Black spots on body */}
+      <rect x="20" y="13" width="8" height="8" fill="#262626" />
+      <rect x="34" y="14" width="6" height="6" fill="#262626" />
+      <rect x="38" y="20" width="6" height="4" fill="#262626" />
       
-      {/* Head - white */}
-      <rect x="4" y="8" width="20" height="20" fill="#E8E8E8" />
-      {/* Head - top edge */}
-      <rect x="4" y="8" width="20" height="4" fill="#C7C7C7" />
-      {/* Head - front face area */}
-      <rect x="0" y="14" width="6" height="12" fill="#C7C7C7" />
+      {/* HEAD - square blocky */}
+      <rect x="0" y="4" width="18" height="18" fill="#D8D8D8" />
+      {/* Head top edge */}
+      <rect x="0" y="4" width="18" height="3" fill="#A8A8A8" />
+      {/* Head front */}
+      <rect x="0" y="7" width="4" height="12" fill="#B8B8B8" />
       
-      {/* Eyes */}
-      <rect x="8" y="12" width="4" height="4" fill="white" />
-      <rect x="10" y="12" width="2" height="4" fill="black" />
+      {/* EYE */}
+      <rect x="6" y="8" width="3" height="3" fill="#FFFFFF" />
+      <rect x="7" y="9" width="2" height="2" fill="#000000" />
       
-      {/* Snout/Muzzle - tan/pink */}
-      <rect x="0" y="18" width="8" height="8" fill="#A08070" />
+      {/* MUZZLE - gray/tan snout */}
+      <rect x="-4" y="12" width="6" height="8" fill="#A08878" />
       {/* Nostrils */}
-      <rect x="1" y="20" width="2" height="3" fill="#4a4a4a" />
-      <rect x="4" y="20" width="2" height="3" fill="#4a4a4a" />
+      <rect x="-3" y="15" width="2" height="2" fill="#484848" />
+      <rect x="0" y="15" width="2" height="2" fill="#484848" />
       
-      {/* Horns */}
-      <rect x="6" y="2" width="4" height="8" fill="#E8E8E8" />
-      <rect x="8" y="0" width="2" height="4" fill="#C7C7C7" />
-      <rect x="16" y="2" width="4" height="8" fill="#E8E8E8" />
-      <rect x="16" y="0" width="2" height="4" fill="#C7C7C7" />
+      {/* HORNS - pointing up from head */}
+      <rect x="4" y="0" width="3" height="6" fill="#F0F0F0" />
+      <rect x="12" y="0" width="3" height="6" fill="#F0F0F0" />
       
-      {/* Ears */}
-      <rect x="2" y="6" width="6" height="4" fill="#E8E8E8" />
-      <rect x="20" y="6" width="6" height="4" fill="#E8E8E8" />
+      {/* EAR */}
+      <rect x="2" y="2" width="4" height="4" fill="#D8D8D8" />
       
-      {/* Legs - white with black hooves */}
-      <rect x="26" y="36" width="8" height="14" fill="#E8E8E8" />
-      <rect x="26" y="46" width="8" height="4" fill="#262626" />
-      <rect x="48" y="36" width="8" height="14" fill="#E8E8E8" />
-      <rect x="48" y="46" width="8" height="4" fill="#262626" />
+      {/* LEGS - white legs with black hooves */}
+      <rect x="20" y="26" width="5" height="10" fill="#D8D8D8" />
+      <rect x="20" y="33" width="5" height="3" fill="#262626" />
+      <rect x="39" y="26" width="5" height="10" fill="#D8D8D8" />
+      <rect x="39" y="33" width="5" height="3" fill="#262626" />
       
-      {/* Udder */}
-      <rect x="36" y="34" width="10" height="6" fill="#FFB6C1" />
+      {/* UDDER */}
+      <rect x="28" y="24" width="8" height="4" fill="#FFB8B8" />
       
-      {/* Tail */}
-      <rect x="60" y="16" width="4" height="12" fill="#262626" />
-      <rect x="62" y="26" width="4" height="6" fill="#262626" />
+      {/* TAIL - black hanging tail */}
+      <rect x="46" y="12" width="3" height="10" fill="#262626" />
+      <rect x="48" y="20" width="3" height="4" fill="#262626" />
     </svg>
   )
 }
@@ -251,7 +248,7 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
 
   return (
     <div
-      className="absolute bottom-[18px] z-[2] transition-all duration-150"
+      className="absolute bottom-[12px] z-[2] transition-all duration-150"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
@@ -298,7 +295,7 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
 
   return (
     <div
-      className="absolute bottom-[22px] z-[2] transition-all duration-150"
+      className="absolute bottom-[8px] z-[2] transition-all duration-150"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
