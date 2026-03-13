@@ -111,81 +111,105 @@ export function PixelClouds() {
   )
 }
 
-// Minecraft cow sprite - side view pixel grid (each number = color index)
-// 0=transparent, 1=white(#E8E8E8), 2=black(#262626), 3=gray(#C7C7C7), 4=pink snout(#F5948F), 5=dark gray(#8B8B8B)
-const COW_SPRITE = [
-  [0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,2,1,2,1,2,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,2,4,4,4,2,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,2,2,2,0,2,2,2,2,2,2,2,2,0,0],
-  [0,0,0,0,0,0,0,0,0,2,1,1,2,2,1,1,2,2,2,0],
-  [0,0,0,0,0,0,0,0,0,2,1,1,2,2,1,1,2,2,2,0],
-  [0,0,0,0,0,0,0,0,0,2,3,3,1,1,3,3,1,1,2,0],
-  [0,0,0,0,0,0,0,0,0,2,3,3,1,1,3,3,1,1,2,0],
-  [0,0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0,0,0],
-]
-
-const COW_COLORS: Record<number, string> = {
-  0: "transparent",
-  1: "#E8E8E8",
-  2: "#262626",
-  3: "#C7C7C7",
-  4: "#F5948F",
-  5: "#8B8B8B",
-}
-
-// Minecraft pig sprite - side view pixel grid
-// 0=transparent, 1=pink(#F0A0A0), 2=dark pink(#DB7B7B), 3=light pink(#EDCACA), 4=snout(#DB9090), 5=black(#262626)
-const PIG_SPRITE = [
-  [0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,2,1,1,1,2,0,0,0,0,0,0,0,0],
-  [0,0,0,0,2,1,5,1,2,0,0,0,0,0,0,0,0],
-  [0,0,0,2,4,4,4,4,2,0,0,0,0,0,0,0,0],
-  [0,0,0,0,2,2,2,2,0,2,2,2,2,2,2,2,0],
-  [0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,2,2],
-  [0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,2,0],
-  [0,0,0,0,0,0,0,0,2,3,3,3,3,3,3,2,0],
-  [0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0],
-  [0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,0,0],
-]
-
-const PIG_COLORS: Record<number, string> = {
-  0: "transparent",
-  1: "#F0A0A0",
-  2: "#DB7B7B",
-  3: "#EDCACA",
-  4: "#DB9090",
-  5: "#262626",
-}
-
-function PixelSprite({ 
-  sprite, 
-  colors, 
-  pixelSize = 3 
-}: { 
-  sprite: number[][]
-  colors: Record<number, string>
-  pixelSize?: number 
-}) {
+// Minecraft Pig SVG Component - Side view with 3D blocky style
+function MinecraftPigSVG() {
   return (
-    <div style={{ imageRendering: "pixelated" }}>
-      {sprite.map((row, y) => (
-        <div key={y} className="flex">
-          {row.map((pixel, x) => (
-            <div
-              key={x}
-              style={{
-                width: pixelSize,
-                height: pixelSize,
-                backgroundColor: colors[pixel],
-              }}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
+    <svg width="60" height="40" viewBox="0 0 60 40" style={{ imageRendering: "pixelated" }}>
+      {/* Body - main pink */}
+      <rect x="20" y="12" width="30" height="18" fill="#fab8c4" />
+      {/* Body - top highlight */}
+      <rect x="20" y="12" width="30" height="4" fill="#fcd7de" />
+      {/* Body - bottom shadow */}
+      <rect x="20" y="26" width="30" height="4" fill="#f6889d" />
+      
+      {/* Head - main */}
+      <rect x="4" y="8" width="18" height="18" fill="#fab8c4" />
+      {/* Head - top highlight */}
+      <rect x="4" y="8" width="18" height="4" fill="#fcd7de" />
+      {/* Head - front (snout area) */}
+      <rect x="0" y="14" width="6" height="10" fill="#fcd7de" />
+      
+      {/* Eye */}
+      <rect x="8" y="12" width="4" height="4" fill="white" />
+      <rect x="10" y="12" width="2" height="4" fill="black" />
+      
+      {/* Snout */}
+      <rect x="0" y="16" width="6" height="6" fill="#f6889d" />
+      {/* Nostrils */}
+      <rect x="1" y="18" width="2" height="2" fill="#BB444E" />
+      <rect x="3" y="18" width="2" height="2" fill="#BB444E" />
+      
+      {/* Ears */}
+      <rect x="6" y="4" width="4" height="6" fill="#fab8c4" />
+      <rect x="14" y="4" width="4" height="6" fill="#fab8c4" />
+      
+      {/* Legs */}
+      <rect x="22" y="30" width="6" height="10" fill="#fab8c4" />
+      <rect x="24" y="30" width="4" height="10" fill="#f6889d" />
+      <rect x="42" y="30" width="6" height="10" fill="#fab8c4" />
+      <rect x="44" y="30" width="4" height="10" fill="#f6889d" />
+      
+      {/* Tail (curly) */}
+      <rect x="50" y="14" width="4" height="4" fill="#f6889d" />
+      <rect x="54" y="12" width="3" height="3" fill="#f6889d" />
+      <rect x="56" y="10" width="3" height="3" fill="#f6889d" />
+    </svg>
+  )
+}
+
+// Minecraft Cow SVG Component - Side view with 3D blocky style  
+function MinecraftCowSVG() {
+  return (
+    <svg width="70" height="50" viewBox="0 0 70 50" style={{ imageRendering: "pixelated" }}>
+      {/* Body - white base */}
+      <rect x="22" y="14" width="38" height="22" fill="#E8E8E8" />
+      {/* Body - top darker edge */}
+      <rect x="22" y="14" width="38" height="4" fill="#C7C7C7" />
+      {/* Body - black spots */}
+      <rect x="26" y="18" width="10" height="10" fill="#262626" />
+      <rect x="42" y="20" width="8" height="8" fill="#262626" />
+      <rect x="50" y="26" width="8" height="6" fill="#262626" />
+      
+      {/* Head - white */}
+      <rect x="4" y="8" width="20" height="20" fill="#E8E8E8" />
+      {/* Head - top edge */}
+      <rect x="4" y="8" width="20" height="4" fill="#C7C7C7" />
+      {/* Head - front face area */}
+      <rect x="0" y="14" width="6" height="12" fill="#C7C7C7" />
+      
+      {/* Eyes */}
+      <rect x="8" y="12" width="4" height="4" fill="white" />
+      <rect x="10" y="12" width="2" height="4" fill="black" />
+      
+      {/* Snout/Muzzle - tan/pink */}
+      <rect x="0" y="18" width="8" height="8" fill="#A08070" />
+      {/* Nostrils */}
+      <rect x="1" y="20" width="2" height="3" fill="#4a4a4a" />
+      <rect x="4" y="20" width="2" height="3" fill="#4a4a4a" />
+      
+      {/* Horns */}
+      <rect x="6" y="2" width="4" height="8" fill="#E8E8E8" />
+      <rect x="8" y="0" width="2" height="4" fill="#C7C7C7" />
+      <rect x="16" y="2" width="4" height="8" fill="#E8E8E8" />
+      <rect x="16" y="0" width="2" height="4" fill="#C7C7C7" />
+      
+      {/* Ears */}
+      <rect x="2" y="6" width="6" height="4" fill="#E8E8E8" />
+      <rect x="20" y="6" width="6" height="4" fill="#E8E8E8" />
+      
+      {/* Legs - white with black hooves */}
+      <rect x="26" y="36" width="8" height="14" fill="#E8E8E8" />
+      <rect x="26" y="46" width="8" height="4" fill="#262626" />
+      <rect x="48" y="36" width="8" height="14" fill="#E8E8E8" />
+      <rect x="48" y="46" width="8" height="4" fill="#262626" />
+      
+      {/* Udder */}
+      <rect x="36" y="34" width="10" height="6" fill="#FFB6C1" />
+      
+      {/* Tail */}
+      <rect x="60" y="16" width="4" height="12" fill="#262626" />
+      <rect x="62" y="26" width="4" height="6" fill="#262626" />
+    </svg>
   )
 }
 
@@ -198,10 +222,10 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
     const interval = setInterval(() => {
       if (isWalking) {
         setX((prev) => {
-          const next = prev + facing * 0.08
-          if (next > 80) {
+          const next = prev + facing * 0.05
+          if (next > 75) {
             setFacing(-1)
-            return 80
+            return 75
           }
           if (next < 5) {
             setFacing(1)
@@ -217,7 +241,7 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
       if (Math.random() > 0.6) {
         setFacing((prev) => (prev === 1 ? -1 : 1))
       }
-    }, 3000 + Math.random() * 4000)
+    }, 3000 + Math.random() * 5000)
 
     return () => {
       clearInterval(interval)
@@ -227,11 +251,11 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
 
   return (
     <div
-      className="absolute bottom-[26px] z-[2] transition-all duration-100"
+      className="absolute bottom-[18px] z-[2] transition-all duration-150"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
-      <PixelSprite sprite={COW_SPRITE} colors={COW_COLORS} pixelSize={3} />
+      <MinecraftCowSVG />
     </div>
   )
 }
@@ -245,10 +269,10 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
     const interval = setInterval(() => {
       if (isWalking) {
         setX((prev) => {
-          const next = prev + facing * 0.06
-          if (next > 85) {
+          const next = prev + facing * 0.04
+          if (next > 80) {
             setFacing(-1)
-            return 85
+            return 80
           }
           if (next < 8) {
             setFacing(1)
@@ -264,7 +288,7 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
       if (Math.random() > 0.6) {
         setFacing((prev) => (prev === 1 ? -1 : 1))
       }
-    }, 2500 + Math.random() * 3000)
+    }, 2500 + Math.random() * 4000)
 
     return () => {
       clearInterval(interval)
@@ -274,11 +298,11 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
 
   return (
     <div
-      className="absolute bottom-[26px] z-[2] transition-all duration-100"
+      className="absolute bottom-[22px] z-[2] transition-all duration-150"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
-      <PixelSprite sprite={PIG_SPRITE} colors={PIG_COLORS} pixelSize={3} />
+      <MinecraftPigSVG />
     </div>
   )
 }
