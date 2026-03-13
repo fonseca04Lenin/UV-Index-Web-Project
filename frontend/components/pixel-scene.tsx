@@ -111,48 +111,50 @@ export function PixelClouds() {
   )
 }
 
-// Minecraft Pig SVG Component - Side view with authentic blocky Minecraft style
+// Minecraft Pig SVG Component - Side view based on actual Minecraft pig design
 function MinecraftPigSVG() {
   return (
-    <svg width="48" height="32" viewBox="0 0 48 32" style={{ imageRendering: "pixelated" }}>
-      {/* BODY - rectangular box shape */}
-      <rect x="16" y="8" width="24" height="14" fill="#F0A0A0" />
-      {/* Body top highlight */}
-      <rect x="16" y="8" width="24" height="3" fill="#FFCECE" />
-      {/* Body bottom darker */}
-      <rect x="16" y="19" width="24" height="3" fill="#DB7B7B" />
+    <svg width="52" height="36" viewBox="0 0 52 36" style={{ imageRendering: "pixelated" }}>
+      {/* BODY - main pink rectangular body */}
+      <rect x="18" y="10" width="26" height="14" fill="#F0A0A0" />
+      {/* Body shading - top lighter */}
+      <rect x="18" y="10" width="26" height="4" fill="#fcd7de" />
+      {/* Body shading - bottom darker */}
+      <rect x="18" y="20" width="26" height="4" fill="#f6889d" />
       
-      {/* HEAD - square blocky head */}
-      <rect x="0" y="4" width="16" height="16" fill="#F0A0A0" />
-      {/* Head top highlight */}
-      <rect x="0" y="4" width="16" height="3" fill="#FFCECE" />
-      {/* Head front face */}
-      <rect x="0" y="7" width="4" height="10" fill="#FFCECE" />
+      {/* HEAD - square blocky Minecraft head */}
+      <rect x="2" y="6" width="16" height="16" fill="#fab8c4" />
+      {/* Head top lighter */}
+      <rect x="2" y="6" width="16" height="4" fill="#fcd7de" />
       
-      {/* EYE - small black square */}
-      <rect x="6" y="8" width="3" height="3" fill="#FFFFFF" />
-      <rect x="7" y="9" width="2" height="2" fill="#000000" />
+      {/* EYE - white with black pupil */}
+      <rect x="4" y="10" width="4" height="4" fill="#FFFFFF" />
+      <rect x="6" y="10" width="2" height="4" fill="#000000" />
       
-      {/* SNOUT - protruding rectangle */}
-      <rect x="-4" y="10" width="6" height="8" fill="#EDAAAA" />
-      {/* Nostrils */}
-      <rect x="-3" y="13" width="2" height="2" fill="#8B5555" />
-      <rect x="0" y="13" width="2" height="2" fill="#8B5555" />
+      {/* SNOUT - the distinctive pig snout flat on face */}
+      <rect x="0" y="14" width="6" height="6" fill="#f6889d" />
+      {/* Nostrils - two dark squares */}
+      <rect x="1" y="16" width="2" height="2" fill="#BB444E" />
+      <rect x="3" y="16" width="2" height="2" fill="#BB444E" />
       
-      {/* EAR - single visible ear from side */}
-      <rect x="4" y="0" width="6" height="5" fill="#F0A0A0" />
-      <rect x="4" y="0" width="6" height="2" fill="#DB7B7B" />
+      {/* EARS - flat rectangle ears on top */}
+      <rect x="4" y="2" width="5" height="5" fill="#fab8c4" />
+      <rect x="12" y="2" width="5" height="5" fill="#fab8c4" />
+      {/* Ear inner darker */}
+      <rect x="5" y="3" width="3" height="3" fill="#f6889d" />
+      <rect x="13" y="3" width="3" height="3" fill="#f6889d" />
       
-      {/* LEGS - 4 short stubby legs */}
-      <rect x="18" y="22" width="5" height="8" fill="#F0A0A0" />
-      <rect x="20" y="22" width="3" height="8" fill="#DB7B7B" />
-      <rect x="33" y="22" width="5" height="8" fill="#F0A0A0" />
-      <rect x="35" y="22" width="3" height="8" fill="#DB7B7B" />
+      {/* LEGS - 4 short pink legs */}
+      <rect x="20" y="24" width="5" height="10" fill="#fab8c4" />
+      <rect x="37" y="24" width="5" height="10" fill="#fab8c4" />
+      {/* Leg shading */}
+      <rect x="22" y="24" width="3" height="10" fill="#f6889d" />
+      <rect x="39" y="24" width="3" height="10" fill="#f6889d" />
       
       {/* TAIL - curly pig tail */}
-      <rect x="40" y="10" width="3" height="3" fill="#F0A0A0" />
-      <rect x="43" y="8" width="3" height="3" fill="#F0A0A0" />
-      <rect x="45" y="6" width="2" height="3" fill="#DB7B7B" />
+      <rect x="44" y="12" width="3" height="3" fill="#fab8c4" />
+      <rect x="46" y="10" width="3" height="3" fill="#fab8c4" />
+      <rect x="48" y="8" width="3" height="3" fill="#f6889d" />
     </svg>
   )
 }
