@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, redirect
 import requests
 from datetime import datetime
 import logging
+import os
 from functools import lru_cache
 
 # basic logging setup
@@ -98,9 +99,11 @@ def process_forecast_data(forecast_data, current_date_str):
     
     return formatted_forecast[:7]
 
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+
 @app.route("/")
 def home():
-    return redirect("http://localhost:3000")
+    return redirect(FRONTEND_URL)
 
 
 @app.route("/api/uv")
