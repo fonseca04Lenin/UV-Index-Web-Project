@@ -115,12 +115,13 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
   const [x, setX] = useState(initialX)
   const [facing, setFacing] = useState<1 | -1>(direction)
   const [isWalking, setIsWalking] = useState(true)
+  const [legOffset, setLegOffset] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isWalking) {
         setX((prev) => {
-          const next = prev + facing * 0.3
+          const next = prev + facing * 0.15
           if (next > 85) {
             setFacing(-1)
             return 85
@@ -131,16 +132,16 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
           }
           return next
         })
+        setLegOffset((prev) => (prev + 1) % 4)
       }
-    }, 50)
+    }, 100)
 
-    // Random pause/walk
     const pauseInterval = setInterval(() => {
       setIsWalking((prev) => !prev)
       if (Math.random() > 0.5) {
         setFacing((prev) => (prev === 1 ? -1 : 1))
       }
-    }, 2000 + Math.random() * 3000)
+    }, 3000 + Math.random() * 4000)
 
     return () => {
       clearInterval(interval)
@@ -148,44 +149,87 @@ function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1
     }
   }, [facing, isWalking])
 
+  const frontLegUp = isWalking && legOffset < 2
+  const backLegUp = isWalking && legOffset >= 2
+
   return (
     <div
-      className="absolute bottom-12 z-[1] transition-transform"
+      className="absolute bottom-[38px] z-[2]"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
-      {/* Minecraft-style cow */}
-      <div className="flex flex-col">
-        {/* Head */}
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#d4d4d4]" />
-          <div className="w-2 h-2 bg-[#e8e8e8]" />
-          <div className="w-2 h-2 bg-[#d4d4d4]" />
+      {/* Minecraft-style cow - SIDE VIEW with 3D depth */}
+      <div className="relative" style={{ imageRendering: "pixelated" }}>
+        {/* Head (box shape from side) */}
+        <div className="absolute -left-3 top-0 flex flex-col">
+          {/* Top of head - darker for 3D */}
+          <div className="flex">
+            <div className="w-[5px] h-[3px] bg-[#8a8a8a]" />
+            <div className="w-[5px] h-[3px] bg-[#a0a0a0]" />
+          </div>
+          {/* Head side */}
+          <div className="flex">
+            <div className="w-[5px] h-[5px] bg-[#d4d4d4]" />
+            <div className="w-[5px] h-[5px] bg-[#e8e8e8]" />
+          </div>
+          {/* Eye */}
+          <div className="absolute top-[4px] left-[2px] w-[2px] h-[2px] bg-[#1a1a1a]" />
+          {/* Snout/nose area */}
+          <div className="flex">
+            <div className="w-[5px] h-[4px] bg-[#c4b59a]" />
+            <div className="w-[5px] h-[4px] bg-[#d4c4aa]" />
+          </div>
+          {/* Nostril */}
+          <div className="absolute top-[10px] left-[2px] w-[1px] h-[1px] bg-[#4a4a4a]" />
         </div>
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
-          <div className="w-2 h-2 bg-[#f5deb3]" />
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
+        
+        {/* Body (long box from side) */}
+        <div className="flex flex-col">
+          {/* Top edge - darker for 3D */}
+          <div className="flex">
+            <div className="w-[6px] h-[2px] bg-[#1a1a1a]" />
+            <div className="w-[6px] h-[2px] bg-[#8a8a8a]" />
+            <div className="w-[6px] h-[2px] bg-[#1a1a1a]" />
+            <div className="w-[6px] h-[2px] bg-[#8a8a8a]" />
+          </div>
+          {/* Body - spotted pattern */}
+          <div className="flex">
+            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
+            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
+            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
+            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
+          </div>
+          <div className="flex">
+            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
+            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
+            <div className="w-[6px] h-[6px] bg-[#1a1a1a]" />
+            <div className="w-[6px] h-[6px] bg-[#e8e8e8]" />
+          </div>
+          {/* Belly - lighter */}
+          <div className="flex">
+            <div className="w-[6px] h-[3px] bg-[#c8c8c8]" />
+            <div className="w-[6px] h-[3px] bg-[#d8d8d8]" />
+            <div className="w-[6px] h-[3px] bg-[#d8d8d8]" />
+            <div className="w-[6px] h-[3px] bg-[#c8c8c8]" />
+          </div>
         </div>
-        {/* Body */}
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#e8e8e8]" />
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
-          <div className="w-2 h-2 bg-[#e8e8e8]" />
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
-        </div>
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
-          <div className="w-2 h-2 bg-[#e8e8e8]" />
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
-          <div className="w-2 h-2 bg-[#e8e8e8]" />
-        </div>
-        {/* Legs */}
-        <div className="flex">
-          <div className={`w-2 h-2 bg-[#d4d4d4] ${isWalking ? "animate-pulse" : ""}`} />
-          <div className="w-2 h-2 bg-transparent" />
-          <div className="w-2 h-2 bg-transparent" />
-          <div className={`w-2 h-2 bg-[#d4d4d4] ${isWalking ? "animate-pulse" : ""}`} />
+        
+        {/* Legs - 4 legs visible from side (front pair, back pair) */}
+        <div className="flex justify-between" style={{ width: "24px" }}>
+          {/* Front legs */}
+          <div className="flex flex-col">
+            <div 
+              className="w-[4px] h-[8px] bg-[#c8c8c8]"
+              style={{ transform: frontLegUp ? "translateY(-2px)" : "translateY(0)" }}
+            />
+          </div>
+          {/* Back legs */}
+          <div className="flex flex-col">
+            <div 
+              className="w-[4px] h-[8px] bg-[#c8c8c8]"
+              style={{ transform: backLegUp ? "translateY(-2px)" : "translateY(0)" }}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -196,12 +240,13 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
   const [x, setX] = useState(initialX)
   const [facing, setFacing] = useState<1 | -1>(direction)
   const [isWalking, setIsWalking] = useState(true)
+  const [legOffset, setLegOffset] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isWalking) {
         setX((prev) => {
-          const next = prev + facing * 0.25
+          const next = prev + facing * 0.12
           if (next > 90) {
             setFacing(-1)
             return 90
@@ -212,16 +257,16 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
           }
           return next
         })
+        setLegOffset((prev) => (prev + 1) % 4)
       }
-    }, 50)
+    }, 100)
 
-    // Random pause/walk
     const pauseInterval = setInterval(() => {
       setIsWalking((prev) => !prev)
       if (Math.random() > 0.5) {
         setFacing((prev) => (prev === 1 ? -1 : 1))
       }
-    }, 1500 + Math.random() * 2500)
+    }, 2500 + Math.random() * 3000)
 
     return () => {
       clearInterval(interval)
@@ -229,42 +274,79 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
     }
   }, [facing, isWalking])
 
+  const frontLegUp = isWalking && legOffset < 2
+  const backLegUp = isWalking && legOffset >= 2
+
   return (
     <div
-      className="absolute bottom-11 z-[1] transition-transform"
+      className="absolute bottom-[38px] z-[2]"
       style={{ left: `${x}%`, transform: `scaleX(${facing})` }}
       aria-hidden="true"
     >
-      {/* Minecraft-style pig */}
-      <div className="flex flex-col">
-        {/* Head with snout */}
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#f0a0a0]" />
-          <div className="w-2 h-2 bg-[#ffb6b6]" />
-          <div className="w-2 h-2 bg-[#f0a0a0]" />
+      {/* Minecraft-style pig - SIDE VIEW with 3D depth */}
+      <div className="relative" style={{ imageRendering: "pixelated" }}>
+        {/* Head (cube from side) */}
+        <div className="absolute -left-2 top-1 flex flex-col">
+          {/* Top of head */}
+          <div className="flex">
+            <div className="w-[4px] h-[2px] bg-[#d68a8a]" />
+            <div className="w-[4px] h-[2px] bg-[#e8a0a0]" />
+          </div>
+          {/* Head side */}
+          <div className="flex">
+            <div className="w-[4px] h-[5px] bg-[#f0a8a8]" />
+            <div className="w-[4px] h-[5px] bg-[#ffb8b8]" />
+          </div>
+          {/* Eye */}
+          <div className="absolute top-[3px] left-[1px] w-[2px] h-[2px] bg-[#1a1a1a]" />
+          {/* Snout */}
+          <div className="absolute top-[5px] -left-[3px] flex flex-col">
+            <div className="w-[4px] h-[3px] bg-[#f5c0c0]" />
+            <div className="absolute top-[1px] left-[1px] w-[1px] h-[1px] bg-[#8a5050]" />
+          </div>
         </div>
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
-          <div className="w-2 h-2 bg-[#ffcece]" />
-          <div className="w-2 h-2 bg-[#1a1a1a]" />
+        
+        {/* Body (rectangular from side) */}
+        <div className="flex flex-col">
+          {/* Top edge */}
+          <div className="flex">
+            <div className="w-[5px] h-[2px] bg-[#d68a8a]" />
+            <div className="w-[5px] h-[2px] bg-[#e09898]" />
+            <div className="w-[5px] h-[2px] bg-[#d68a8a]" />
+          </div>
+          {/* Body main */}
+          <div className="flex">
+            <div className="w-[5px] h-[5px] bg-[#f0a8a8]" />
+            <div className="w-[5px] h-[5px] bg-[#ffb8b8]" />
+            <div className="w-[5px] h-[5px] bg-[#f0a8a8]" />
+          </div>
+          <div className="flex">
+            <div className="w-[5px] h-[5px] bg-[#ffb8b8]" />
+            <div className="w-[5px] h-[5px] bg-[#ffc8c8]" />
+            <div className="w-[5px] h-[5px] bg-[#ffb8b8]" />
+          </div>
+          {/* Belly */}
+          <div className="flex">
+            <div className="w-[5px] h-[2px] bg-[#ffc8c8]" />
+            <div className="w-[5px] h-[2px] bg-[#ffd8d8]" />
+            <div className="w-[5px] h-[2px] bg-[#ffc8c8]" />
+          </div>
         </div>
-        {/* Body */}
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#ffb6b6]" />
-          <div className="w-2 h-2 bg-[#ffcece]" />
-          <div className="w-2 h-2 bg-[#ffb6b6]" />
-        </div>
-        <div className="flex">
-          <div className="w-2 h-2 bg-[#f0a0a0]" />
-          <div className="w-2 h-2 bg-[#ffb6b6]" />
-          <div className="w-2 h-2 bg-[#f0a0a0]" />
-        </div>
+        
         {/* Legs */}
-        <div className="flex">
-          <div className={`w-2 h-2 bg-[#f0a0a0] ${isWalking ? "animate-pulse" : ""}`} />
-          <div className="w-2 h-2 bg-transparent" />
-          <div className={`w-2 h-2 bg-[#f0a0a0] ${isWalking ? "animate-pulse" : ""}`} />
+        <div className="flex justify-between" style={{ width: "15px" }}>
+          <div 
+            className="w-[3px] h-[6px] bg-[#f0a8a8]"
+            style={{ transform: frontLegUp ? "translateY(-2px)" : "translateY(0)" }}
+          />
+          <div 
+            className="w-[3px] h-[6px] bg-[#f0a8a8]"
+            style={{ transform: backLegUp ? "translateY(-2px)" : "translateY(0)" }}
+          />
         </div>
+        
+        {/* Curly tail */}
+        <div className="absolute -right-1 top-3 w-[3px] h-[3px] rounded-full bg-[#f0a8a8]" />
       </div>
     </div>
   )
@@ -272,12 +354,12 @@ function PixelPig({ initialX, direction }: { initialX: number; direction: 1 | -1
 
 export function PixelAnimals() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 pointer-events-none z-[1]" aria-hidden="true">
-      <PixelCow initialX={20} direction={1} />
-      <PixelCow initialX={70} direction={-1} />
-      <PixelPig initialX={35} direction={1} />
-      <PixelPig initialX={55} direction={-1} />
-      <PixelPig initialX={80} direction={1} />
+    <div className="fixed bottom-0 left-0 right-0 pointer-events-none z-[2]" aria-hidden="true">
+      <PixelCow initialX={15} direction={1} />
+      <PixelCow initialX={65} direction={-1} />
+      <PixelPig initialX={30} direction={1} />
+      <PixelPig initialX={50} direction={-1} />
+      <PixelPig initialX={78} direction={1} />
     </div>
   )
 }
