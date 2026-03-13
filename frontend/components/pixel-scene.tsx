@@ -1,3 +1,7 @@
+"use client"
+
+import { useEffect, useState } from "react"
+
 /** Pixel art landscape scene for the background - ground, trees, grass */
 
 const STAR_POSITIONS = [
@@ -106,10 +110,6 @@ export function PixelClouds() {
     </div>
   )
 }
-
-"use client"
-
-import { useEffect, useState } from "react"
 
 function PixelCow({ initialX, direction }: { initialX: number; direction: 1 | -1 }) {
   const [x, setX] = useState(initialX)
